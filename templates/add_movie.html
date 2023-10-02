@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Add Movie</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container py-5">
+        <h1 class="mb-4">Add Movie</h1>
+        <form method="POST" action="{{ url_for('add_movie', user_id=user_id) }}" class="needs-validation" novalidate>
+            <div class="form-group">
+                <label for="name">Movie Title:</label>
+                <input type="text" id="name" name="name" class="form-control" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Add Movie</button>
+        </form>
+        {% if error_message %}
+        <div class="alert alert-danger mt-4">
+            {{ error_message }}
+        </div>
+        {% endif %}
+        <a href="{{ url_for('user_movies', user_id=user_id) }}" class="btn btn-secondary mt-3">Back</a>
+    </div>
+<div class="container">
+    <a href="{{ url_for('home') }}" class="btn btn-primary">Home</a>
+</div>
+</body>
+</html>

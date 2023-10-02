@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>User Movies</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container py-5">
+        <h1 class="mb-4">Movies</h1>
+        <a href="{{ url_for('add_movie', user_id=user_id) }}" class="btn btn-success mb-3">Add Movie</a>
+        <ul class="list-group">
+            {% for movie in movies %}
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                <span>{{ movie.name }} ({{ movie.year }}), directed by {{ movie.director }}, Rating: {{ movie.rating }}</span>
+                <div>
+                    <a href="{{ url_for('update_movie', user_id=user_id, movie_id=movie.id) }}" class="btn btn-primary btn-sm mr-2">Update</a>
+                    <a href="{{ url_for('delete_movie', user_id=user_id, movie_id=movie.id) }}" class="btn btn-danger btn-sm">Delete</a>
+                </div>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+<div class="container">
+    <a href="{{ url_for('home') }}" class="btn btn-primary">Home</a>
+</div>
+</body>
+</html>
