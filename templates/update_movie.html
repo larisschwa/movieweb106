@@ -8,28 +8,26 @@
 <body>
     <div class="container py-5">
         <h1 class="mb-4">Update Movie</h1>
-        <form method="POST" action="{{ url_for('update_movie', user_id=user_id, movie_id=movie_id) }}" class="needs-validation" novalidate>
+        <form method="POST" action="{{ url_for('update_movie', user_id=user_id, movie_id=movie.id) }}">
             <div class="form-group">
                 <label for="name">Movie Title:</label>
-                <input type="text" id="name" name="name" value="{{ movie.name }}" class="form-control" required>
+                <input type="text" id="name" name="name" class="form-control" value="{{ movie.name }}" required>
             </div>
             <div class="form-group">
                 <label for="director">Director:</label>
-                <input type="text" id="director" name="director" value="{{ movie.director }}" class="form-control" required>
+                <input type="text" id="director" name="director" class="form-control" value="{{ movie.director }}" required>
             </div>
             <div class="form-group">
                 <label for="year">Year:</label>
-                <input type="number" id="year" name="year" value="{{ movie.year }}" class="form-control" required>
+                <input type="number" id="year" name="year" class="form-control" value="{{ movie.year }}" required>
             </div>
             <div class="form-group">
                 <label for="rating">Rating:</label>
-                <input type="number" id="rating" name="rating" value="{{ movie.rating }}" step="0.1" min="0" max="10" class="form-control" required>
+                <input type="number" id="rating" name="rating" step="0.1" min="0" max="10" class="form-control" value="{{ movie.rating }}" required>
             </div>
             <button type="submit" class="btn btn-primary">Update Movie</button>
         </form>
+        <a href="{{ url_for('home') }}" class="btn btn-primary mt-3">Home</a>
     </div>
-<div class="container">
-    <a href="{{ url_for('home') }}" class="btn btn-primary">Home</a>
-</div>
 </body>
 </html>

@@ -36,6 +36,33 @@ class JSONDataManager(DataManagerInterface):
         data = self._load_data()
         return data
 
+    def add_user(self, user_name):
+        """Adds a new user to the list of users.
+        Args:
+            user_name (str): The name of the new user.
+        Returns:
+            str: An error message if the user addition fails, or
+            None if successful.
+        """
+        data = self._load_data()
+
+        for user in data:
+            if user['name'] == user_name:
+                return "User with this name already exists."
+
+        user_id = str(len(data) + 1)
+
+        new_user = {
+            'user_id': user_id,
+            'name': user_name,
+            'movies': []
+        }
+
+        data.append(new_user)
+        self._write_data(data)
+
+        return None, user_name
+
     def get_user_movies(self, user_id):
         """Returns the movies of a specific user.
         Args:
@@ -71,6 +98,8 @@ class JSONDataManager(DataManagerInterface):
                 'director': movie_details['Director'],
                 'year': int(movie_details['Year']),
                 'rating': float(movie_details['imdbRating'])
+                if 'imdbRating' in movie_details and movie_details[
+                                        'imdbRating'] != 'N/A' else 0.0
             }
 
             user_id = str(user_id)
@@ -87,6 +116,8 @@ class JSONDataManager(DataManagerInterface):
         else:
             return movie_details['Error']
 
+        return None
+
     def get_movie(self, user_id, movie_id):
         """Returns a specific movie of a specific user.
         Args:
@@ -96,7 +127,7 @@ class JSONDataManager(DataManagerInterface):
             dict: The movie, or None if the movie doesn't exist.
         """
         user_id = str(user_id)
-        movie_id = str(movie_id)
+        movie_id = int(movie_id)
         data = self._load_data()
         for user in data:
             if user['user_id'] == user_id:

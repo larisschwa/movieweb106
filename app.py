@@ -1,12 +1,17 @@
 from flask import Flask, render_template, request, redirect, url_for, jsonify
 import requests
 import json
+import uuid
 from DataManager.json_data_manager import JSONDataManager
 
 
 app = Flask(__name__)
 
 json_data_manager = JSONDataManager('movies.json')
+
+
+def generate_user_id():
+    return str(uuid.uuid4())
 
 
 def fetch_movie_info(movie_title, api_key='5eeb20d'):
@@ -96,6 +101,20 @@ def user_movies(user_id):
     return render_template('user_movies.html', user_id=user_id, movies=movies)
 
 
+@app.route('/add_user', methods=['GET', 'POST'])
+def add_user():
+    if request.method == 'POST':
+        user_name = request.form.get('name')
+        error_message, user_name = json_data_manager.add_user(user_name)
+
+        if error_message is not None:
+            return render_template('add_user.html', error_message=error_message)
+
+        return redirect(url_for('user_movies', user_id=user_name))
+
+    return render_template('add_user.html')
+
+
 @app.route('/users/<user_id>/add_movie', methods=['GET', 'POST'])
 def add_movie(user_id):
     """
@@ -146,16 +165,18 @@ def update_movie(user_id, movie_id):
         movies page.
         Otherwise, renders the update movie page with the current movie data.
     """
+    movie = json_data_manager.get_movie(user_id, movie_id)
+
     if request.method == 'POST':
         updated_movie = {
-            'title': request.form.get('title'),
+            'title': request.form.get('name'),  # Change 'title' to 'name'
             'director': request.form.get('director'),
             'year': int(request.form.get('year')),
             'rating': float(request.form.get('rating'))
         }
         json_data_manager.update_movie(user_id, movie_id, updated_movie)
         return redirect(url_for('user_movies', user_id=user_id))
-    movie = json_data_manager.get_movie(user_id, movie_id)
+
     return render_template('update_movie.html', user_id=user_id,
                            movie=movie, movie_id=movie_id)
 
